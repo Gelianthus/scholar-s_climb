@@ -2,7 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/logo";
+import { TowerCard, shapes } from "@/components/tower-card";
 import { TowerArt } from "@/components/tower-art";
 import { towers } from "@/lib/towers";
 import { currentUser } from "@/lib/server/auth";
@@ -71,27 +73,33 @@ export default async function Landing() {
 						the next one.
 					</p>
 				</div>
-				<ul className="grid gap-12 md:grid-cols-3">
+				<ul className="grid items-end gap-x-10 gap-y-16 md:grid-cols-3">
 					{towers.map((t, i) => (
-						<li
-							key={t.slug}
-							className="pixel-frame flex flex-col gap-4 p-6"
-						>
-							<p className="text-base">
-								Course {i + 1} · {t.level}
-							</p>
-							<h3 className="text-lg">{t.name}</h3>
-							<p>{t.summary}</p>
-							<ul className="list-disc space-y-1 pl-6">
-								{t.outcomes.map((o) => (
-									<li key={o}>{o}</li>
-								))}
-							</ul>
-							<p className="mt-auto flex items-center gap-2 text-base">
-								{i > 0 && <Lock className="h-4 w-4" />}
-								{t.lessons.length} lessons, {t.quiz.length} quiz questions
-								{i > 0 && `, unlocks after ${towers[i - 1].name}`}
-							</p>
+						<li key={t.slug}>
+							<TowerCard
+								shape={shapes[i]}
+								state={i === 0 ? "open" : "locked"}
+							>
+								<div className="flex flex-col gap-3">
+									<Badge>
+										Course {i + 1} · {t.level}
+									</Badge>
+									<h3 className="text-base">{t.name}</h3>
+									<p>{t.summary}</p>
+									<ul className="list-disc space-y-1 pl-6">
+										{t.outcomes.map((o) => (
+											<li key={o}>{o}</li>
+										))}
+									</ul>
+									<p className="flex items-center gap-2 text-base">
+										{i > 0 && <Lock className="h-4 w-4 shrink-0" />}
+										<span>
+											{t.lessons.length} lessons, {t.quiz.length} quiz questions
+											{i > 0 && `, unlocks after ${towers[i - 1].name}`}
+										</span>
+									</p>
+								</div>
+							</TowerCard>
 						</li>
 					))}
 				</ul>
