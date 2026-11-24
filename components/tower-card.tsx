@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 export type TowerShape = "keep" | "turret" | "spire";
 export type TowerState = "open" | "cleared" | "locked";
 
-/** Each course gets its own silhouette, by position in the list. */
 export const shapes: TowerShape[] = ["keep", "turret", "spire"];
 
 const wallFor: Record<TowerState, string> = {
@@ -42,16 +41,17 @@ function Flag() {
 	);
 }
 
-/** A course card shaped like a tower: the card itself is the tower, and its content sits inside the wall. */
 export function TowerCard({
 	shape,
 	state,
 	className,
+	bodyClassName,
 	children,
 }: {
 	shape: TowerShape;
 	state: TowerState;
 	className?: string;
+	bodyClassName?: string;
 	children: React.ReactNode;
 }) {
 	const wall = wallFor[state];
@@ -86,26 +86,45 @@ export function TowerCard({
 
 			{shape === "spire" && (
 				<div
-					className="mx-auto flex h-20 w-4/5 items-end justify-center"
+					className="mx-auto h-20 w-4/5"
 					aria-hidden
 					style={{ clipPath: "polygon(50% 0, 100% 100%, 0 100%)" }}
 				>
-					<div className={cn("absolute inset-0", wall)} />
+					<div className={cn("h-full w-full", wall)} />
 				</div>
 			)}
 
-			<div className={cn("relative px-5 pb-[4.5rem] pt-5 text-ink", wall)}>
-				{children}
-				{/* Stone base with a gate */}
+			<div className={cn("text-ink", wall)}>
 				<div
-					className="brick absolute inset-x-0 bottom-0 h-14"
-					aria-hidden
-				/>
+					className={bodyClassName}
+					style={
+						bodyClassName ? undefined : { padding: "1.25rem 1.25rem 1.5rem" }
+					}
+				>
+					{children}
+				</div>
 				<div
-					className="absolute bottom-0 left-1/2 h-10 w-9 -translate-x-1/2 bg-ink"
-					style={{ borderRadius: "18px 18px 0 0" }}
 					aria-hidden
-				/>
+					className="relative"
+					style={{
+						height: "3.5rem",
+						backgroundImage:
+							"linear-gradient(#000000 3px, transparent 3px), linear-gradient(90deg, #000000 3px, transparent 3px)",
+						backgroundSize: "40px 28px",
+					}}
+				>
+					<div
+						className="absolute bg-ink"
+						style={{
+							bottom: 0,
+							left: "50%",
+							width: "2.25rem",
+							height: "2.5rem",
+							transform: "translateX(-50%)",
+							borderRadius: "18px 18px 0 0",
+						}}
+					/>
+				</div>
 			</div>
 		</div>
 	);

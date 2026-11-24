@@ -2,54 +2,122 @@
 
 /* The only four colors in the project */
 @theme inline {
-  --color-ink: #000000;   /* anything dark */
-  --color-mint: #CFFFE2;  /* active / hover */
-  --color-sage: #A2D5C6;  /* primary */
-  --color-paper: #F6F6F6; /* anything light */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --font-pixel: var(--font-press), monospace;
-  --font-body: var(--font-vt), monospace;
+	--color-ink: #000000; /* anything dark */
+	--color-mint: #cfffe2; /* active / hover */
+	--color-sage: #a2d5c6; /* primary */
+	--color-paper: #f6f6f6; /* anything light */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--font-pixel: var(--font-press), monospace;
+	--font-body: var(--font-vt), monospace;
 }
 
 :root {
-  --background: #000000;
-  --foreground: #F6F6F6;
-  --primary: #A2D5C6;
-  --primary-foreground: #000000;
-  --accent: #CFFFE2;
-  --accent-foreground: #000000;
+	--background: #000000;
+	--foreground: #f6f6f6;
+	--primary: #a2d5c6;
+	--primary-foreground: #000000;
+	--accent: #cfffe2;
+	--accent-foreground: #000000;
 }
 
 @layer base {
-  * { @apply border-ink; image-rendering: pixelated; }
-  body { @apply bg-background text-foreground font-body text-xl leading-relaxed antialiased; }
-  h1, h2, h3 { @apply font-pixel leading-snug; }
-  :focus-visible { outline: 4px solid #CFFFE2; outline-offset: 4px; }
+	* {
+		@apply border-ink;
+		image-rendering: pixelated;
+	}
+	body {
+		@apply bg-background text-foreground font-body text-xl leading-relaxed antialiased;
+	}
+	h1,
+	h2,
+	h3 {
+		@apply font-pixel leading-snug;
+	}
+	:focus-visible {
+		outline: 4px solid #cfffe2;
+		outline-offset: 4px;
+	}
+}
+
+/* A patch of bricks. Used in small, clipped areas on the sides inside a tower. */
+.brick-patch {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='%23A2D5C6'%3E%3Crect width='64' height='2'/%3E%3Crect y='32' width='64' height='2'/%3E%3Crect width='2' height='32'/%3E%3Crect x='32' y='32' width='2' height='32'/%3E%3C/g%3E%3C/svg%3E");
+	background-size: 64px 64px;
+}
+
+/* The game column inside a tower: full width on small screens, never more than 70% of the screen on large ones.
+   Plain CSS on purpose, so it doesn't depend on Tailwind picking up arbitrary classes. */
+.game-column {
+	width: 100%;
+}
+@media (min-width: 640px) {
+	.game-column {
+		grid-template-columns: 3.5rem minmax(0, 1fr) 3.5rem;
+	}
+}
+@media (min-width: 1024px) {
+	.game-column {
+		max-width: min(70vw, 58rem);
+	}
 }
 
 @layer components {
-  /* Parchment panel with a stone-frame outline */
-  .pixel-frame { @apply bg-paper text-ink; box-shadow: 0 0 0 4px #000000, 0 0 0 8px #A2D5C6; }
-  /* Beveled retro button */
-  .pixel-btn {
-    @apply bg-primary text-ink font-pixel text-xs uppercase tracking-wide transition-none;
-    box-shadow: inset -4px -4px 0 0 #000000, inset 4px 4px 0 0 #F6F6F6;
-  }
-  .pixel-btn:hover:not(:disabled) { @apply bg-accent; transform: translateY(2px); }
-  .pixel-btn:active:not(:disabled) { box-shadow: inset 4px 4px 0 0 #000000; }
-  .pixel-btn:disabled { @apply opacity-50 cursor-not-allowed; }
-  /* Stone brick wall */
-  .brick {
-    background-image: linear-gradient(#000000 3px, transparent 3px), linear-gradient(90deg, #000000 3px, transparent 3px);
-    background-size: 40px 28px;
-  }
+	/* Parchment panel with a stone-frame outline */
+	.pixel-frame {
+		@apply bg-paper text-ink;
+		box-shadow:
+			0 0 0 4px #000000,
+			0 0 0 8px #a2d5c6;
+	}
+	/* Beveled retro button */
+	.pixel-btn {
+		@apply bg-primary text-ink font-pixel text-xs uppercase tracking-wide transition-none;
+		box-shadow:
+			inset -4px -4px 0 0 #000000,
+			inset 4px 4px 0 0 #f6f6f6;
+	}
+	.pixel-btn:hover:not(:disabled) {
+		@apply bg-accent;
+		transform: translateY(2px);
+	}
+	.pixel-btn:active:not(:disabled) {
+		box-shadow: inset 4px 4px 0 0 #000000;
+	}
+	.pixel-btn:disabled {
+		@apply opacity-50 cursor-not-allowed;
+	}
+	/* Stone brick wall */
+	.brick {
+		background-image:
+			linear-gradient(#000000 3px, transparent 3px),
+			linear-gradient(90deg, #000000 3px, transparent 3px);
+		background-size: 40px 28px;
+	}
 }
 
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-.shake { animation: shake 0.25s steps(4); }
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+@keyframes shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-6px);
+	}
+	75% {
+		transform: translateX(6px);
+	}
+}
+.shake {
+	animation: shake 0.25s steps(4);
+}

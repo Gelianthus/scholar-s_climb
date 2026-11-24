@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/logo";
-import { TowerCard, shapes } from "@/components/tower-card";
 import { TowerArt } from "@/components/tower-art";
+import { TowerCard, shapes } from "@/components/tower-card";
 import { towers } from "@/lib/towers";
 import { currentUser } from "@/lib/server/auth";
 
@@ -17,13 +16,12 @@ export default async function Landing() {
 			<section className="grid items-center gap-12 py-8 md:grid-cols-2">
 				<div className="space-y-6">
 					<h1 className="text-2xl leading-relaxed sm:text-3xl">
-						Go from zero to building real websites
+						Learn IT skills, one floor at a time
 					</h1>
 					<p className="max-w-prose text-2xl">
-						Learn HTML, CSS and JavaScript in the order professionals use them.
-						Read a clear lesson, prove it with a quiz, and unlock the next
-						course. No experience needed, and you finish able to build and ship
-						your own pages.
+						Build real skills in tech from the ground up. Read a clear lesson,
+						prove it with a quiz, and unlock the next floor. No experience
+						needed, and every tower takes you from beginner toward confident.
 					</p>
 					<div className="flex flex-wrap gap-4">
 						<Button
@@ -56,7 +54,6 @@ export default async function Landing() {
 					/>
 					<TowerArt
 						floors={5}
-						locked
 						className="w-28"
 					/>
 				</div>
@@ -67,10 +64,11 @@ export default async function Landing() {
 				className="scroll-mt-8 space-y-10"
 			>
 				<div className="space-y-3">
-					<h2 className="text-xl">Three courses, one path</h2>
+					<h2 className="text-xl">Choose your tower</h2>
 					<p className="max-w-prose text-2xl">
-						Each course builds on the last. Pass a course&apos;s quiz to unlock
-						the next one.
+						Each tower is a subject. Every floor has short lessons and a quiz,
+						and passing a quiz unlocks the next, harder floor. More towers are
+						on the way.
 					</p>
 				</div>
 				<ul className="grid items-end gap-x-10 gap-y-16 md:grid-cols-3">
@@ -78,26 +76,17 @@ export default async function Landing() {
 						<li key={t.slug}>
 							<TowerCard
 								shape={shapes[i]}
-								state={i === 0 ? "open" : "locked"}
+								state="open"
 							>
 								<div className="flex flex-col gap-3">
-									<Badge>
-										Course {i + 1} · {t.level}
-									</Badge>
+									<Badge>{t.level}</Badge>
 									<h3 className="text-base">{t.name}</h3>
 									<p>{t.summary}</p>
-									<ul className="list-disc space-y-1 pl-6">
-										{t.outcomes.map((o) => (
-											<li key={o}>{o}</li>
+									<ol className="list-decimal space-y-1 pl-6">
+										{t.floors.map((f) => (
+											<li key={f.title}>{f.title}</li>
 										))}
-									</ul>
-									<p className="flex items-center gap-2 text-base">
-										{i > 0 && <Lock className="h-4 w-4 shrink-0" />}
-										<span>
-											{t.lessons.length} lessons, {t.quiz.length} quiz questions
-											{i > 0 && `, unlocks after ${towers[i - 1].name}`}
-										</span>
-									</p>
+									</ol>
 								</div>
 							</TowerCard>
 						</li>
@@ -111,7 +100,9 @@ export default async function Landing() {
 					className="mx-auto"
 				/>
 				<h2 className="text-lg">Ready to start climbing?</h2>
-				<p className="text-2xl">Create a free account and begin with HTML.</p>
+				<p className="text-2xl">
+					Create a free account and pick your first tower.
+				</p>
 				<Button
 					asChild
 					size="lg"
