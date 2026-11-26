@@ -1,0 +1,29 @@
+# Presentation Checklist
+
+## Requirements:
+
+- Landing Page
+
+- Login Page
+
+- Color Scheme
+
+- Next.js
+  - Routes
+  - Dynamic Routes
+  - Page
+  - Layout
+
+- Tailwind
+
+- Typescript
+
+## Here are some of the prompts that I used to help create this website
+
+- Revise the taglines, headlines, and value propositions texts to have a retro game tone.
+
+- Populate the quiz data with 3 topics and 3 lessons each. The topics are HTML, CSS, JS. Here are the lessons for each topic. HTML = Fundamentals, Attributes, and Forms. CSS = Fundamentals, Media Query and Key animations, and Tailwind. JS = Fundamentals, Promises, React.
+
+- Integrate this colors to my global css file: #000000 for dark colors, #cfffe2 as accent color, #a2d5c6 as primary color, #f6f6f6 for light colors.
+
+- Create graphics for me using CSS. I want multiple types of towers and a patch of bricks that can be used as a bg.

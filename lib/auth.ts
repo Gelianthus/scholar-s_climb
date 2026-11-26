@@ -40,7 +40,6 @@ async function post(url: string, body?: unknown) {
 export function useAuth() {
 	const { user, ready, setUser } = useContext(AuthContext);
 
-	/** Each returns an error message, or null on success. */
 	const signUp = async (name: string, email: string, password: string) => {
 		const { ok, data } = await post("/api/auth/signup", {
 			name,
@@ -96,4 +95,20 @@ export function useProgress() {
 	);
 
 	return { climbed, climb, ready };
+}
+
+export async function forgotPassword(
+	email: string,
+): Promise<{ error?: string; devResetLink?: string }> {
+	const { ok, data } = await post("/api/auth/forgot", { email });
+	if (!ok) return { error: (data.error as string) ?? "Something went wrong." };
+	return { devResetLink: data.devResetLink as string | undefined };
+}
+
+export async function resetPassword(
+	token: string,
+	password: string,
+): Promise<string | null> {
+	const { ok, data } = await post("/api/auth/reset", { token, password });
+	return ok ? null : ((data.error as string) ?? "Something went wrong.");
 }

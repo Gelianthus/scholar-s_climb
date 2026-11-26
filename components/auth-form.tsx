@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
+import { PasswordInput } from "@/components/password-input";
 import { useAuth } from "@/lib/auth";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
@@ -24,7 +25,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 		const name = String(f.get("name") ?? "").trim();
 		const email = String(f.get("email")).trim();
 		const password = String(f.get("password"));
+		const confirm = String(f.get("confirm") ?? "");
 		setError(null);
+		if (signup && password !== confirm)
+			return setError("Passwords do not match.");
 		setPending(true);
 		const err = signup
 			? await signUp(name, email, password)
@@ -75,17 +79,37 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 					/>
 				</div>
 				<div className="space-y-1">
-					<label htmlFor="password">Password</label>
-					<Input
+					<div className="flex items-baseline justify-between gap-3">
+						<label htmlFor="password">Password</label>
+						{!signup && (
+							<Link
+								href="/forgot-password"
+								className="text-base underline hover:bg-accent"
+							>
+								Forgot password?
+							</Link>
+						)}
+					</div>
+					<PasswordInput
 						id="password"
 						name="password"
-						type="password"
 						autoComplete={signup ? "new-password" : "current-password"}
 						required
 						minLength={signup ? 8 : undefined}
 					/>
 					{signup && <p className="text-base">At least 8 characters.</p>}
 				</div>
+				{signup && (
+					<div className="space-y-1">
+						<label htmlFor="confirm">Confirm password</label>
+						<PasswordInput
+							id="confirm"
+							name="confirm"
+							autoComplete="new-password"
+							required
+						/>
+					</div>
+				)}
 				{error && (
 					<p
 						role="alert"

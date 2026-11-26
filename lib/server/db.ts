@@ -8,9 +8,15 @@ export type UserRecord = {
 type Db = {
 	users: Map<string, UserRecord>;
 	sessions: Map<string, { userId: string; expires: number }>;
+	resets: Map<string, { userId: string; expires: number }>;
 };
 
 const g = globalThis as unknown as { __scDb?: Db };
-export const db: Db = (g.__scDb ??= { users: new Map(), sessions: new Map() });
+export const db: Db = (g.__scDb ??= {
+	users: new Map(),
+	sessions: new Map(),
+	resets: new Map(),
+});
+db.resets ??= new Map();
 
 export const delay = (ms = 300) => new Promise((r) => setTimeout(r, ms));
